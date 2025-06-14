@@ -3,9 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 0 38%;
+        }
+
+        h1{
+            color: #4CAF50;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 2px;
+            background-color: #fff;
+            color: #4CAF50;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        #restart-button:hover{
+            background: #86f189;
+            color: rgb(34, 34, 34);
+        }
+
+        #status {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <div id="status">
+        <h1></h1>
+        <button id="restart-button" class="button">Restart</button>
+    </div>
+    <h1>[ Tic Tac Toe ]</h1>
+    <div id="game-board">
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+        <button class="cell" ></button>
+    </div>
+    <button id="reset-button" class="button">Reset</button>
+    <script>
+
+        const outerDiv = document.getElementById('game-board');
+        const fill = document.querySelectorAll('.cell');
+
+        let playerCall = true;
+        let restart;
+
+        let winCondition = [
+            [0,1,2],[3,4,5],[6,7,8], // Horizontal
+            [0,3,6],[1,4,7],[2,5,8], // Vertical
+            [0,4,8],[2,4,6]          // Diagonal
+     ]; 
+
+     checkWin = () => {
+        for (let pattern of winCondition) {
+            console.log("Checking pattern:", pattern);
+            // console.log(pattern[0], pattern[1], pattern[2]);
+            // console.log(fill[pattern[0]].innerHTML, 
+                        // fill[pattern[1]].innerHTML, 
+                        // fill[pattern[2]].innerHTML);
+
+
+                        let postion1 = fill[pattern[0]].innerHTML; 
+                        let postion2 = fill[pattern[1]].innerHTML; 
+                        let postion3 = fill[pattern[2]].innerHTML;
+                        console.log("Postion1:", postion1);
+                        console.log("Postion2:", postion2); 
+                        console.log("Postion3:", postion3);
+                        if( postion1 !== "" && postion2 !== "" && postion3 !== "" &&
+                           postion1 === postion2 && postion2 === postion3) {
+                         console.log("winner");
+                         if(!playerCall) {
+                             const winner = document.querySelector('#status h1');
+                             const displayPanel = document.querySelector('#status');
+                             winner.textContent = `Player X wins!`;
+                             displayPanel.style.display = "block";
+                         } else {
+                             const winner = document.querySelector('#status h1');
+                             const displayPanel = document.querySelector('#status');
+                             winner.textContent = `Player O wins!`;
+                             displayPanel.style.display = "block";
+                         }
+        }
+    }
+    };
+
+        document.getElementById('restart-button').addEventListener('click', () => {
+            const displayPanel = document.querySelector('#status');
+            displayPanel.style.display = "none";
+            fill.forEach(cell => {
+                cell.textContent = "";
+                cell.disabled = false;
+                cell.style.color = "#4CAF50"; // Reset color for new game
+            });
+            playerCall = true; // Reset player turn
+        });
+        document.getElementById('reset-button').addEventListener('click', () => {
+            fill.forEach(cell => {
+                cell.textContent = "";
+                cell.disabled = false;
+                cell.style.color = "#4CAF50"; // Reset color for new game
+            });
+            playerCall = true; // Reset player turn
+        });
     
+     fill.forEach((cell, index) => {
+        cell.addEventListener('click', () => {
+            console.log("hello_world");
+            // when cell is clicked, it will not allow to click again
+            if (playerCall) {
+                cell.textContent = "X";
+                playerCall = false;
+            } else {
+                cell.textContent = "O";
+                cell.style.color = "#f00"; // Change color for O
+                playerCall = true;
+            }
+            cell.disabled = true;
+            checkWin();
+        });
+     });
+    
+    
+
+    </script>
 </body>
 </html>
